@@ -22,7 +22,12 @@ export default class MainScene extends Phaser.Scene {
 		this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 		
 		var tileset = map.addTilesetImage('tileset_sample', 'stage_image');
-		var bgLayer = map.createDynamicLayer('background', tileset, 0, 0);
+		// bgLayer = map.createDynamicLayer('background', tileset, 0, 0);
+		this.bg = this.add.image(0,0,'backround').setOrigin(0,0).setScrollFactor(0);
+		this.hills3 = this.add.tileSprite(0, 0, 480, 320, 'hills3').setOrigin(0).setScrollFactor(0);
+		this.hills2 = this.add.tileSprite(0, 0, 480, 320, 'hills2').setOrigin(0).setScrollFactor(0);
+		this.hills1 = this.add.tileSprite(0, 0, 480, 320, 'hills1').setOrigin(0).setScrollFactor(0);
+		
 		this.groundLayer = map.createDynamicLayer('foreground', tileset, 0, 0);
 
 		
@@ -59,7 +64,7 @@ export default class MainScene extends Phaser.Scene {
 		this.showReadyText("Get ready...",
 			()=>{ this.showReadyText("Go!"); });
 
-		this.showDarkMode(true);
+		//this.showDarkMode(true);
   }
 
   showDarkMode(show) {
@@ -144,6 +149,9 @@ export default class MainScene extends Phaser.Scene {
   }
   
   update() {
+	  this.hills1.tilePositionX = this.cameras.main.scrollX/2;
+	  this.hills2.tilePositionX = this.cameras.main.scrollX/4;
+	  this.hills3.tilePositionX = this.cameras.main.scrollX/8;
 	  
 	  this.moving = true;
 	  
