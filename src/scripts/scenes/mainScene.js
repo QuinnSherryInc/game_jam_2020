@@ -118,9 +118,13 @@ export default class MainScene extends Phaser.Scene {
 	if(this.fireKey.isDown){
 		
 		var newExplosion = this.add.sprite(-50, 0, 'explosion');
+		newExplosion.on('animationcomplete', () => {
+			newExplosion.destroy();
+		});
 		newExplosion.setPosition(tile.pixelX + 25, tile.pixelY);
 		newExplosion.play('explosion')
-	  	this.groundLayer.removeTileAt(tile.x, tile.y);
+		this.groundLayer.removeTileAt(tile.x, tile.y);
+	
 		
 	}
     // Return true to exit processing collision of this tile vs the sprite - in this case, it
