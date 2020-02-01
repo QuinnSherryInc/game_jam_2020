@@ -18,10 +18,11 @@ export default class MainScene extends Phaser.Scene {
 
   create() {
 	  
-		this.cameras.main.setBounds(0, 0, 1920, 320);
-		this.physics.world.setBounds(0, 0, 1920, 320);
-		
 		var map = this.make.tilemap({ key: 'stage' });
+		
+		this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+		this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+		
 		var tileset = map.addTilesetImage('tileset_sample', 'stage_image');
 		var bgLayer = map.createDynamicLayer('background', tileset, 0, 0);
 		this.groundLayer = map.createDynamicLayer('foreground', tileset, 0, 0);
