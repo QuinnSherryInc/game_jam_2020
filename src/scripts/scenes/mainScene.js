@@ -111,15 +111,15 @@ export default class MainScene extends Phaser.Scene {
 			hasDrill: true
 		}
 	
-		this.ex = this.add.sprite(-50, 0, 'explosion');
   }
   
   checkCollision(sprite, tile){
 	
 	if(this.fireKey.isDown){
 		
-		this.ex.setPosition(tile.pixelX + 25, tile.pixelY);
-		this.ex.play('explosion')
+		var newExplosion = this.add.sprite(-50, 0, 'explosion');
+		newExplosion.setPosition(tile.pixelX + 25, tile.pixelY);
+		newExplosion.play('explosion')
 	  	this.groundLayer.removeTileAt(tile.x, tile.y);
 		
 	}
