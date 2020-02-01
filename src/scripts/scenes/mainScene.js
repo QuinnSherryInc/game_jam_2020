@@ -12,7 +12,6 @@ export default class MainScene extends Phaser.Scene {
 	  
     this.load.tilemapTiledJSON('stage', '../../assets/map/level1.json');
     this.load.image('stage_image', '../../assets/img/tileset_sample.png');
-	this.load.spritesheet('mm', '../../assets/img/rover.png', { frameWidth: 48, frameHeight: 32, margin: 0, spacing: 0 });
 }
 
   create() {
@@ -26,60 +25,6 @@ export default class MainScene extends Phaser.Scene {
 		var bgLayer = map.createDynamicLayer('background', tileset, 0, 0);
 		this.groundLayer = map.createDynamicLayer('foreground', tileset, 0, 0);
 
-        this.anims.create({
-			key: 'idle',
-			frames: this.anims.generateFrameNumbers('mm', { start: 0, end: 0 }),
-			frameRate: 10,
-			repeat: -1
-		});
-		
-        this.anims.create({
-			key: 'idle-fire',
-			frames: this.anims.generateFrameNumbers('mm', { start: 0, end: 0 }),
-			frameRate: 15,
-			repeat: -1
-		});
-		
-        this.anims.create({
-			key: 'jump',
-			frames: this.anims.generateFrameNumbers('mm', { start: 2, end: 2 }),
-			frameRate: 15,
-			repeat: -1
-		});
-		
-        this.anims.create({
-			key: 'jump-fire',
-			frames: this.anims.generateFrameNumbers('mm', { start: 2, end: 2 }),
-			frameRate: 15,
-			repeat: -1
-		});
-		
-        this.anims.create({
-			key: 'running',
-			frames: this.anims.generateFrameNumbers('mm', { start: 0, end: 1 }),
-			frameRate: 15,
-			repeat: -1
-		});
-		
-        this.anims.create({
-			key: 'running-fire',
-			frames: this.anims.generateFrameNumbers('mm', { start: 0, end: 1 }),
-			frameRate: 15,
-			repeat: -1
-		});
-		
-        this.anims.create({
-			key: 'duck',
-			frames: this.anims.generateFrameNumbers('mm', { start: 4, end: 5 }),
-			frameRate: 15,
-			repeat: -1
-		});
-
-		this.anims.create({
-			key: 'explosion',
-			frames: this.anims.generateFrameNumbers('explosion', {start: 0, end: 10}),
-			frameRate: 10
-		});
 		
 		this.mm = this.add.sprite(0, 100, 'mm');
 		
@@ -117,7 +62,7 @@ export default class MainScene extends Phaser.Scene {
   
   showReadyText(text, cb){
 	  
-       var readyText = this.add.dynamicBitmapText(240, 150, 'ice', text, 32).setOrigin(.5,.5);
+       var readyText = this.add.dynamicBitmapText(240, 150, 'ice', text, 32).setScrollFactor(0).setOrigin(.5,.5);
 		
 		this.tweens.add({
 			

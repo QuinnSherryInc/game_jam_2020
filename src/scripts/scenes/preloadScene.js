@@ -4,26 +4,67 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('phaser-logo', 'assets/img/phaser-logo.png');
     this.load.spritesheet('explosion', 'assets/img/Explosion.png', { frameWidth: 96, frameHeight: 96});
     this.load.bitmapFont('ice', 'assets/font/iceicebaby.png', 'assets/font/iceicebaby.xml');
+	this.load.spritesheet('mm', 'assets/img/rover.png', { frameWidth: 48, frameHeight: 32, margin: 0, spacing: 0 });
   }
 
   create() {
-    this.scene.start('MainScene')
+        this.anims.create({
+			key: 'idle',
+			frames: this.anims.generateFrameNumbers('mm', { start: 0, end: 0 }),
+			frameRate: 10,
+			repeat: -1
+		});
+		
+        this.anims.create({
+			key: 'idle-fire',
+			frames: this.anims.generateFrameNumbers('mm', { start: 0, end: 0 }),
+			frameRate: 15,
+			repeat: -1
+		});
+		
+        this.anims.create({
+			key: 'jump',
+			frames: this.anims.generateFrameNumbers('mm', { start: 2, end: 2 }),
+			frameRate: 15,
+			repeat: -1
+		});
+		
+        this.anims.create({
+			key: 'jump-fire',
+			frames: this.anims.generateFrameNumbers('mm', { start: 2, end: 2 }),
+			frameRate: 15,
+			repeat: -1
+		});
+		
+        this.anims.create({
+			key: 'running',
+			frames: this.anims.generateFrameNumbers('mm', { start: 0, end: 1 }),
+			frameRate: 15,
+			repeat: -1
+		});
+		
+        this.anims.create({
+			key: 'running-fire',
+			frames: this.anims.generateFrameNumbers('mm', { start: 0, end: 1 }),
+			frameRate: 15,
+			repeat: -1
+		});
+		
+        this.anims.create({
+			key: 'duck',
+			frames: this.anims.generateFrameNumbers('mm', { start: 4, end: 5 }),
+			frameRate: 15,
+			repeat: -1
+		});
 
-    /**
-     * This is how you would dynamically import the mainScene class (with code splitting),
-     * add the mainScene to the Scene Manager
-     * and start the scene.
-     * The name of the chunk would be 'mainScene.chunk.js
-     * Find more about code splitting here: https://webpack.js.org/guides/code-splitting/
-     */
-    // let someCondition = true
-    // if (someCondition)
-    //   import(/* webpackChunkName: "mainScene" */ './mainScene').then(mainScene => {
-    //     this.scene.add('MainScene', mainScene.default, true)
-    //   })
-    // else console.log('The mainScene class will not even be loaded by the browser')
+		this.anims.create({
+			key: 'explosion',
+			frames: this.anims.generateFrameNumbers('explosion', {start: 0, end: 10}),
+			frameRate: 10
+		});
+    this.scene.start('WelcomeScene')
+
   }
 }
