@@ -11,7 +11,8 @@ export default class MainScene extends Phaser.Scene {
   preload() {
 	  
     this.load.tilemapTiledJSON('stage', '../../assets/map/level2.json');
-    this.load.image('stage_image', '../../assets/img/tileset_sample.png');
+	this.load.image('stage_image', '../../assets/img/tileset_sample.png');
+	this.originalTime = new Date();
 }
 
   create() {
@@ -38,10 +39,10 @@ export default class MainScene extends Phaser.Scene {
 		
 		this.mm.state = {
 			jumping: true,
-			
+
 			hasDoubleJump: false,
 			hasSlide: false,
-			hasDrill: false,
+			hasDrill: true,
 			hasTorch: false
 		};
 		
@@ -121,19 +122,17 @@ export default class MainScene extends Phaser.Scene {
 	this.groundLayer.removeTileAt(tile.x+1, tile.y-1);
 	  
   }
+
+  removeDrilledTiles(tile) {
+	this.groundLayer.removeTileAt(tile.x, tile.y);
+	this.groundLayer.removeTileAt(tile.x, tile.y+1);
+  }
   
   checkCollision(sprite, tile){
-	
-	if(this.fireKey.isDown){
-		
-		var newExplosion = this.add.sprite(-50, 0, 'explosion');
-		newExplosion.on('animationcomplete', () => {
-			newExplosion.destroy();
-		});
-		newExplosion.setPosition(tile.pixelX + 25, tile.pixelY);
-		newExplosion.play('explosion')
-		this.groundLayer.removeTileAt(tile.x, tile.y);
-	
+
+	if(this.fireKey.isDown && this.mm.state.hasDrill){
+
+		this.removeDrilledTiles(tile);
 		
 	}
     // Return true to exit processing collision of this tile vs the sprite - in this case, it
@@ -198,6 +197,21 @@ export default class MainScene extends Phaser.Scene {
 			this.mm.body.setVelocityX(0);
 			
 		}
+
+		if(this.fireKey.isDown){
+			
+			if(this.mm.state.hasDrill) {
+				var newExplosion = this.add.sprite(-50, 0, 'explosion').setScale(0.5);
+				newExplosion.on('animationcomplete', () => {
+					newExplosion.destroy();
+				});
+				newExplosion.setPosition(this.mm.x + 25, this.mm.y);
+				newExplosion.play('explosion');
+			}
+
+			this.fired();
+
+		}
 		
 	  } else {
 		  
@@ -236,17 +250,35 @@ export default class MainScene extends Phaser.Scene {
 	  
   }
   
-  setMMAnimation(anim){
-	  
-	  if(this.fireKey.isDown){
-		  anim = anim + "-fire";
-	  }
-	  
-	  if(this.mm.anims.currentAnim.key != anim){
-		  
-		  this.mm.anims.play(anim);
-		  
-	  }
-	  
-  }
+	setMMAnimation(anim){
+		
+		if(this.fireKey.isDown){
+			anim = anim + "-fire";
+		}
+		
+		if(this.mm.anims.currentAnim.key != anim){
+			
+			this.mm.anims.play(anim);
+			
+		}
+		
+	}
+
+	fired() {
+
+		var newTime = new Date();
+
+		if(newTime > this.originalTime) {
+
+			var timeDifference  = newTime - this.originalTime;
+
+			if((timeDifference/1000) > 1) {
+				this.mm.state.hasDrill = true;
+				this.originalTime = newTime;
+			} else {
+				this.mm.state.hasDrill = false;
+			}
+
+		}
+	}
 }
