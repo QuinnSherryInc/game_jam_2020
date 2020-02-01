@@ -18,8 +18,8 @@ export default class MainScene extends Phaser.Scene {
 
   create() {
 	  
-		this.cameras.main.setBounds(0, 0, 1920, 320);
-		this.physics.world.setBounds(0, 0, 1920, 320);
+		this.cameras.main.setBounds(0, 0, 16000, 320);
+		this.physics.world.setBounds(0, 0, 16000, 320);
 		
 		var map = this.make.tilemap({ key: 'stage' });
 		var tileset = map.addTilesetImage('tileset_sample', 'stage_image');
