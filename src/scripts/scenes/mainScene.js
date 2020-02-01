@@ -10,7 +10,7 @@ export default class MainScene extends Phaser.Scene {
   
   preload() {
 	  
-    this.load.tilemapTiledJSON('stage', '../../assets/map/level2.json');
+    this.load.tilemapTiledJSON('stage', '../../assets/map/level1.json');
     this.load.image('stage_image', '../../assets/img/tileset_sample.png');
 }
 
@@ -44,10 +44,10 @@ export default class MainScene extends Phaser.Scene {
 		this.mm.state = {
 			jumping: true,
 			
-			hasDoubleJump: false,
-			hasSlide: false,
-			hasDrill: false,
-			hasTorch: false
+			hasDoubleJump: true,
+			hasSlide: true,
+			hasDrill: true,
+			hasTorch: true
 		};
 		
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -57,7 +57,7 @@ export default class MainScene extends Phaser.Scene {
 		this.groundLayer.setCollisionBetween(1,147);
 		this.physics.add.collider(this.mm, this.groundLayer);
 		
-		this.groundLayer.setTileIndexCallback(9, this.checkCollision, this);
+		this.groundLayer.setTileIndexCallback([1,2,3,4,5,9], this.checkCollision, this);
 		this.groundLayer.setTileIndexCallback(91, this.getSlidePowerUp, this);
 		this.groundLayer.setTileIndexCallback(107, this.getSlidePowerUp, this);
 	
