@@ -111,16 +111,46 @@ export default class MainScene extends Phaser.Scene {
 			hasDrill: true
 		}
 	
-		this.ex = this.add.sprite(-50, 0, 'explosion');
+		this.showReadyText("Get ready...",
+			()=>{ this.showReadyText("Go!"); });
+  }
+  
+  showReadyText(text, cb){
+	  
+       var readyText = this.add.dynamicBitmapText(240, 150, 'ice', text, 32).setOrigin(.5,.5);
+		
+		this.tweens.add({
+			
+			targets: readyText,
+			
+			alpha: 0,
+			
+			duration: 0,
+			
+			delay: 50,
+			
+			hold: 50,
+			
+			loop: 10,
+			
+			yoyo: true,
+			
+			onComplete: ()=>{ readyText.destroy(); if(cb) cb(); }
+		});
   }
   
   checkCollision(sprite, tile){
 	
 	if(this.fireKey.isDown){
 		
-		this.ex.setPosition(tile.pixelX + 25, tile.pixelY);
-		this.ex.play('explosion')
-	  	this.groundLayer.removeTileAt(tile.x, tile.y);
+		var newExplosion = this.add.sprite(-50, 0, 'explosion');
+		newExplosion.on('animationcomplete', () => {
+			newExplosion.destroy();
+		});
+		newExplosion.setPosition(tile.pixelX + 25, tile.pixelY);
+		newExplosion.play('explosion')
+		this.groundLayer.removeTileAt(tile.x, tile.y);
+	
 		
 	}
     // Return true to exit processing collision of this tile vs the sprite - in this case, it
