@@ -10,10 +10,9 @@ export default class MainScene extends Phaser.Scene {
   
   preload() {
 	  
-    this.load.image('ship', '../../assets/img/fmship.png');
     this.load.tilemapTiledJSON('stage', '../../assets/stage.json');
     this.load.image('stage_image', '../../assets/img/stage.png');
-	this.load.spritesheet('mm', '../../assets/img/64012.png', { frameWidth: 32, frameHeight: 40, margin: 0, spacing: 1 });
+	this.load.spritesheet('mm', '../../assets/img/rover.png', { frameWidth: 48, frameHeight: 32, margin: 0, spacing: 0 });
 	
 }
 
@@ -36,42 +35,42 @@ export default class MainScene extends Phaser.Scene {
 		
         this.anims.create({
 			key: 'idle-fire',
-			frames: this.anims.generateFrameNumbers('mm', { start: 10, end: 10 }),
+			frames: this.anims.generateFrameNumbers('mm', { start: 0, end: 0 }),
 			frameRate: 15,
 			repeat: -1
 		});
 		
         this.anims.create({
 			key: 'jump',
-			frames: this.anims.generateFrameNumbers('mm', { start: 1, end: 1 }),
+			frames: this.anims.generateFrameNumbers('mm', { start: 2, end: 2 }),
 			frameRate: 15,
 			repeat: -1
 		});
 		
         this.anims.create({
 			key: 'jump-fire',
-			frames: this.anims.generateFrameNumbers('mm', { start: 11, end: 11 }),
+			frames: this.anims.generateFrameNumbers('mm', { start: 2, end: 2 }),
 			frameRate: 15,
 			repeat: -1
 		});
 		
         this.anims.create({
 			key: 'running',
-			frames: this.anims.generateFrameNumbers('mm', { start: 3, end: 9 }),
+			frames: this.anims.generateFrameNumbers('mm', { start: 0, end: 1 }),
 			frameRate: 15,
 			repeat: -1
 		});
 		
         this.anims.create({
 			key: 'running-fire',
-			frames: this.anims.generateFrameNumbers('mm', { start: 12, end: 19 }),
+			frames: this.anims.generateFrameNumbers('mm', { start: 0, end: 1 }),
 			frameRate: 15,
 			repeat: -1
 		});
 		
         this.anims.create({
 			key: 'duck',
-			frames: this.anims.generateFrameNumbers('mm', { start: 40, end: 40 }),
+			frames: this.anims.generateFrameNumbers('mm', { start: 4, end: 5 }),
 			frameRate: 15,
 			repeat: -1
 		});
@@ -83,8 +82,8 @@ export default class MainScene extends Phaser.Scene {
 		this.physics.add.existing(this.mm);
 		
 		this.mm.body.setCollideWorldBounds(true);
-		this.mm.body.setSize(14, 32);
-		this.mm.body.setOffset(10, 9);
+		this.mm.body.setSize(48, 32);
+		this.mm.body.setOffset(0, 0);
 		
 		this.mm.state = { jumping: true };
 		
@@ -94,7 +93,7 @@ export default class MainScene extends Phaser.Scene {
 		this.cameras.main.startFollow(this.mm, true);
 		  groundLayer.setCollisionBetween(1,147);
 		  this.physics.add.collider(this.mm, groundLayer);
-		  
+	
   }
 
   update() {
@@ -137,11 +136,11 @@ export default class MainScene extends Phaser.Scene {
 		if (this.cursors.down.isDown && !this.mm.state.jumping) {
 			keyDown = true;
 			this.setMMAnimation('duck');
-			this.mm.body.setSize(14, 16);
-			this.mm.body.setOffset(10, 25);
+			this.mm.body.setSize(48, 16);
+			this.mm.body.setOffset(0, 16);
 		} else {
-			this.mm.body.setSize(14, 32);
-			this.mm.body.setOffset(10, 9);
+			this.mm.body.setSize(48, 32);
+			this.mm.body.setOffset(0, 0);
 		}
 		
 		if(!keyDown) {
