@@ -10,7 +10,7 @@ export default class MainScene extends Phaser.Scene {
   
   preload() {
 	  
-    this.load.tilemapTiledJSON('stage', '../../assets/stage.json');
+    this.load.tilemapTiledJSON('stage', '../../assets/map/level1.json');
     this.load.image('stage_image', '../../assets/img/stage.png');
 	this.load.spritesheet('mm', '../../assets/img/rover.png', { frameWidth: 48, frameHeight: 32, margin: 0, spacing: 0 });
 	
@@ -22,9 +22,9 @@ export default class MainScene extends Phaser.Scene {
 		this.physics.world.setBounds(0, 0, 1920, 320);
 		
 		var map = this.make.tilemap({ key: 'stage' });
-		var tileset = map.addTilesetImage('0x72_16x16DungeonTileset.v1', 'stage_image');
+		var tileset = map.addTilesetImage('tileset_sample', 'stage_image');
 		var bgLayer = map.createDynamicLayer('background', tileset, 0, 0);
-		var groundLayer = map.createDynamicLayer('ground', tileset, 0, 0);
+		var groundLayer = map.createDynamicLayer('foreground', tileset, 0, 0);
 
         this.anims.create({
 			key: 'idle',
