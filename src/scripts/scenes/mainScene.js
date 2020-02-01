@@ -51,11 +51,31 @@ export default class MainScene extends Phaser.Scene {
 		this.mm.powerUp = {
 			hasDoubleJump: true,
 			hasSlide: true,
-			hasDrill: true
+			hasDrill: true,
+			hasTorch: true
 		}
 	
 		this.showReadyText("Get ready...",
 			()=>{ this.showReadyText("Go!"); });
+
+		this.showDarkMode(true);
+  }
+
+  showDarkMode(show) {
+	  if(show) {
+		this.spotLight = this.make.sprite({
+			x: this.mm.x, 
+			y: this.mm.y,
+			key: 'mask',
+			add: false
+		}).setScale(2);
+		var bitmapMask = new Phaser.Display.Masks.BitmapMask(this, this.spotLight);
+		this.cameras.main.setMask(bitmapMask);
+		this.isDark = true;
+	  }
+	  else{
+		  this.cameras.main.clearMask();
+	  }
   }
   
   showReadyText(text, cb){
@@ -187,6 +207,11 @@ export default class MainScene extends Phaser.Scene {
 				this.setMMAnimation('jump');
 				this.mm.body.setVelocityY(-250);
 			}
+	  }
+
+	  if(this.isDark) {
+		this.spotLight.x = this.mm.x - this.cameras.main.scrollX + this.mm.displayWidth;
+		this.spotLight.y = this.mm.y;
 	  }
 	  
   }

@@ -6,7 +6,8 @@ export default class PreloadScene extends Phaser.Scene {
   preload() {
     this.load.spritesheet('explosion', 'assets/img/Explosion.png', { frameWidth: 96, frameHeight: 96});
     this.load.bitmapFont('ice', 'assets/font/iceicebaby.png', 'assets/font/iceicebaby.xml');
-	this.load.spritesheet('mm', 'assets/img/rover.png', { frameWidth: 48, frameHeight: 32, margin: 0, spacing: 0 });
+    this.load.spritesheet('mm', 'assets/img/rover.png', { frameWidth: 48, frameHeight: 32, margin: 0, spacing: 0 });
+    this.load.image('mask', 'assets/img/mask.png');
   }
 
   create() {
