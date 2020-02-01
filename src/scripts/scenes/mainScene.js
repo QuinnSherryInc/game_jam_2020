@@ -126,8 +126,7 @@ export default class MainScene extends Phaser.Scene {
 			keyDown = true;
 			this.mm.state.jumping = true;
 			this.setMMAnimation('jump');
-			this.mm.body.setVelocityY(-400);
-			
+			this.mm.body.setVelocityY(-350);
 		}
 
 		if (!this.cursors.up.isDown) {
@@ -154,8 +153,10 @@ export default class MainScene extends Phaser.Scene {
 		}
 		
 	  } else {
+
+		
 		  
-		  this.setMMAnimation('jump');
+		 	 this.setMMAnimation('jump');
 		  
 			/*if (this.cursors.left.isDown) {
 				this.mm.setFlipX(true);
@@ -171,6 +172,13 @@ export default class MainScene extends Phaser.Scene {
 				
 			}
 		  
+			if (this.mm.state.doubleJump && this.cursors.up.isDown && this.mm.state.jumping) {
+				
+				keyDown = true;
+				this.setMMAnimation('jump');
+				this.mm.body.setVelocityY(-200);
+
+			}
 	  }
 	  
   }
