@@ -111,6 +111,32 @@ export default class MainScene extends Phaser.Scene {
 			hasDrill: true
 		}
 	
+		this.showReadyText("Get ready...",
+			()=>{ this.showReadyText("Go!"); });
+  }
+  
+  showReadyText(text, cb){
+	  
+       var readyText = this.add.dynamicBitmapText(240, 150, 'ice', text, 32).setOrigin(.5,.5);
+		
+		this.tweens.add({
+			
+			targets: readyText,
+			
+			alpha: 0,
+			
+			duration: 0,
+			
+			delay: 50,
+			
+			hold: 50,
+			
+			loop: 10,
+			
+			yoyo: true,
+			
+			onComplete: ()=>{ readyText.destroy(); if(cb) cb(); }
+		});
   }
   
   checkCollision(sprite, tile){
