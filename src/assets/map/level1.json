@@ -62,7 +62,7 @@
          "margin":0,
          "name":"tileset_sample",
          "spacing":0,
-         "tilecount":160,
+         "tilecount":0,
          "tileheight":16,
          "tilewidth":16
         }],

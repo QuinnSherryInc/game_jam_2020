@@ -11,7 +11,7 @@ export default class MainScene extends Phaser.Scene {
   preload() {
 	  
     this.load.tilemapTiledJSON('stage', '../../assets/map/level1.json');
-    this.load.image('stage_image', '../../assets/img/stage.png');
+    this.load.image('stage_image', '../../assets/img/tileset_sample.png');
 	this.load.spritesheet('mm', '../../assets/img/rover.png', { frameWidth: 48, frameHeight: 32, margin: 0, spacing: 0 });
 	
 }
@@ -91,8 +91,15 @@ export default class MainScene extends Phaser.Scene {
 		this.firKey = this.input.keyboard.addKey('F');  // Get key object
 		
 		this.cameras.main.startFollow(this.mm, true);
-		  groundLayer.setCollisionBetween(1,147);
-		  this.physics.add.collider(this.mm, groundLayer);
+		groundLayer.setCollisionBetween(1,147);
+		this.physics.add.collider(this.mm, groundLayer);
+
+		// power ups
+		this.mm.powerUp = {
+			hasDoubleJump: false,
+			hasSlide: false,
+			hasDrill: false
+		}
 	
   }
 
@@ -130,10 +137,12 @@ export default class MainScene extends Phaser.Scene {
 
 		if (!this.cursors.up.isDown) {
 			this.mm.state.jumping = false;
+			this.mm.state.doubleJump = false;
+			this.mm.state.doubleJumpReady = false;
 		}
 		
 		
-		if (this.cursors.down.isDown && !this.mm.state.jumping) {
+		if (this.cursors.down.isDown && !this.mm.state.jumping && this.mm.powerUp.hasSlide) {
 			keyDown = true;
 			this.setMMAnimation('duck');
 			this.mm.body.setSize(48, 16);
@@ -152,10 +161,8 @@ export default class MainScene extends Phaser.Scene {
 		}
 		
 	  } else {
-
-		
 		  
-		 	 this.setMMAnimation('jump');
+		 	this.setMMAnimation('jump');
 		  
 			/*if (this.cursors.left.isDown) {
 				this.mm.setFlipX(true);
@@ -171,12 +178,15 @@ export default class MainScene extends Phaser.Scene {
 				
 			}
 		  
-			if (this.mm.state.doubleJump && this.cursors.up.isDown && this.mm.state.jumping) {
-				
-				keyDown = true;
-				this.setMMAnimation('jump');
-				this.mm.body.setVelocityY(-200);
+			if (!this.cursors.up.isDown && this.mm.powerUp.hasDoubleJump) {
+				this.mm.state.doubleJumpReady = true;
+			}
 
+			if (!this.mm.state.doubleJump && this.mm.state.doubleJumpReady && this.cursors.up.isDown && this.mm.state.jumping) {
+				keyDown = true;
+				this.mm.state.doubleJump = true;
+				this.setMMAnimation('jump');
+				this.mm.body.setVelocityY(-250);
 			}
 	  }
 	  
