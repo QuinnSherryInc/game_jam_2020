@@ -45,9 +45,7 @@ export default class MainScene extends Phaser.Scene {
 		this.groundLayer.setCollisionBetween(1,147);
 		this.physics.add.collider(this.mm, this.groundLayer);
 		
-		this.groundLayer.setTileIndexCallback(17, this.checkCollision, this);
-		this.groundLayer.setTileIndexCallback(18, this.checkCollision, this);
-		this.groundLayer.setTileIndexCallback(19, this.checkCollision, this);
+		this.groundLayer.setTileIndexCallback(9, this.checkCollision, this);
 
 		// power ups
 		this.mm.powerUp = {
