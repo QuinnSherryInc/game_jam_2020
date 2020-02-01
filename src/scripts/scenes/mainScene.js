@@ -91,8 +91,15 @@ export default class MainScene extends Phaser.Scene {
 		this.firKey = this.input.keyboard.addKey('F');  // Get key object
 		
 		this.cameras.main.startFollow(this.mm, true);
-		  groundLayer.setCollisionBetween(1,147);
-		  this.physics.add.collider(this.mm, groundLayer);
+		groundLayer.setCollisionBetween(1,147);
+		this.physics.add.collider(this.mm, groundLayer);
+
+		// power ups
+		this.mm.powerUp = {
+			hasDoubleJump: false,
+			hasSlide: false,
+			hasDrill: false
+		}
 	
   }
 
@@ -135,7 +142,7 @@ export default class MainScene extends Phaser.Scene {
 		}
 		
 		
-		if (this.cursors.down.isDown && !this.mm.state.jumping) {
+		if (this.cursors.down.isDown && !this.mm.state.jumping && this.mm.powerUp.hasSlide) {
 			keyDown = true;
 			this.setMMAnimation('duck');
 			this.mm.body.setSize(48, 16);
@@ -171,7 +178,7 @@ export default class MainScene extends Phaser.Scene {
 				
 			}
 		  
-			if (!this.cursors.up.isDown) {
+			if (!this.cursors.up.isDown && this.mm.powerUp.hasDoubleJump) {
 				this.mm.state.doubleJumpReady = true;
 			}
 
