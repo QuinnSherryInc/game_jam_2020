@@ -36,7 +36,14 @@ export default class MainScene extends Phaser.Scene {
 		this.mm.body.setSize(48, 32);
 		this.mm.body.setOffset(0, 0);
 		
-		this.mm.state = { jumping: true };
+		this.mm.state = {
+			jumping: true,
+			
+			hasDoubleJump: false,
+			hasSlide: false,
+			hasDrill: false,
+			hasTorch: false
+		};
 		
         this.cursors = this.input.keyboard.createCursorKeys();
 		this.fireKey = this.input.keyboard.addKey('F');  // Get key object
@@ -46,14 +53,8 @@ export default class MainScene extends Phaser.Scene {
 		this.physics.add.collider(this.mm, this.groundLayer);
 		
 		this.groundLayer.setTileIndexCallback(9, this.checkCollision, this);
-
-		// power ups
-		this.mm.powerUp = {
-			hasDoubleJump: true,
-			hasSlide: true,
-			hasDrill: true,
-			hasTorch: true
-		}
+		this.groundLayer.setTileIndexCallback(91, this.getSlidePowerUp, this);
+		this.groundLayer.setTileIndexCallback(107, this.getSlidePowerUp, this);
 	
 		this.showReadyText("Get ready...",
 			()=>{ this.showReadyText("Go!"); });
@@ -100,6 +101,25 @@ export default class MainScene extends Phaser.Scene {
 			
 			onComplete: ()=>{ readyText.destroy(); if(cb) cb(); }
 		});
+  }
+  
+  getSlidePowerUp(sprite, tile){
+	  
+	  this.mm.state.hasSlide = true;
+	  
+	  this.removeQuadTile(tile);
+	  
+  }
+  
+  removeQuadTile(tile){
+	  
+	this.groundLayer.removeTileAt(tile.x, tile.y);
+	this.groundLayer.removeTileAt(tile.x+1, tile.y);
+	this.groundLayer.removeTileAt(tile.x, tile.y+1);
+	this.groundLayer.removeTileAt(tile.x+1, tile.y+1);
+	this.groundLayer.removeTileAt(tile.x, tile.y-1);
+	this.groundLayer.removeTileAt(tile.x+1, tile.y-1);
+	  
   }
   
   checkCollision(sprite, tile){
@@ -161,7 +181,7 @@ export default class MainScene extends Phaser.Scene {
 		}
 		
 		
-		if (this.cursors.down.isDown && !this.mm.state.jumping && this.mm.powerUp.hasSlide) {
+		if (this.cursors.down.isDown && !this.mm.state.jumping && this.mm.state.hasSlide) {
 			keyDown = true;
 			this.setMMAnimation('duck');
 			this.mm.body.setSize(48, 16);
@@ -197,7 +217,7 @@ export default class MainScene extends Phaser.Scene {
 				
 			}
 		  
-			if (!this.cursors.up.isDown && this.mm.powerUp.hasDoubleJump) {
+			if (!this.cursors.up.isDown && this.mm.state.hasDoubleJump) {
 				this.mm.state.doubleJumpReady = true;
 			}
 
