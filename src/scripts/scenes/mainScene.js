@@ -75,7 +75,7 @@ export default class MainScene extends Phaser.Scene {
 			repeat: -1
 		});
 		
-		this.mm = this.add.sprite(50, 500, 'mm');
+		this.mm = this.add.sprite(0, 100, 'mm');
 		
 		this.mm.anims.play('idle');
 		
