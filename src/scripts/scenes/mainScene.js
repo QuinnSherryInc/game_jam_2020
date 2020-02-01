@@ -90,6 +90,7 @@ export default class MainScene extends Phaser.Scene {
 	  
 	  this.removeQuadTile(tile);
 	  
+	this.showReadyText("Down key to slid!");
   }
   
   removeQuadTile(tile){
