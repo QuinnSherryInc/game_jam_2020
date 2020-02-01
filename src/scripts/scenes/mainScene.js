@@ -13,18 +13,17 @@ export default class MainScene extends Phaser.Scene {
     this.load.tilemapTiledJSON('stage', '../../assets/map/level1.json');
     this.load.image('stage_image', '../../assets/img/tileset_sample.png');
 	this.load.spritesheet('mm', '../../assets/img/rover.png', { frameWidth: 48, frameHeight: 32, margin: 0, spacing: 0 });
-	
 }
 
   create() {
 	  
-		this.cameras.main.setBounds(0, 0, 1920, 320);
-		this.physics.world.setBounds(0, 0, 1920, 320);
+		this.cameras.main.setBounds(0, 0, 16000, 320);
+		this.physics.world.setBounds(0, 0, 16000, 320);
 		
 		var map = this.make.tilemap({ key: 'stage' });
 		var tileset = map.addTilesetImage('tileset_sample', 'stage_image');
 		var bgLayer = map.createDynamicLayer('background', tileset, 0, 0);
-		var groundLayer = map.createDynamicLayer('foreground', tileset, 0, 0);
+		this.groundLayer = map.createDynamicLayer('foreground', tileset, 0, 0);
 
         this.anims.create({
 			key: 'idle',
@@ -74,6 +73,12 @@ export default class MainScene extends Phaser.Scene {
 			frameRate: 15,
 			repeat: -1
 		});
+
+		this.anims.create({
+			key: 'explosion',
+			frames: this.anims.generateFrameNumbers('explosion', {start: 0, end: 10}),
+			frameRate: 10
+		});
 		
 		this.mm = this.add.sprite(0, 100, 'mm');
 		
@@ -88,21 +93,41 @@ export default class MainScene extends Phaser.Scene {
 		this.mm.state = { jumping: true };
 		
         this.cursors = this.input.keyboard.createCursorKeys();
-		this.firKey = this.input.keyboard.addKey('F');  // Get key object
+		this.fireKey = this.input.keyboard.addKey('F');  // Get key object
 		
 		this.cameras.main.startFollow(this.mm, true);
-		groundLayer.setCollisionBetween(1,147);
-		this.physics.add.collider(this.mm, groundLayer);
+		this.groundLayer.setCollisionBetween(1,147);
+		this.physics.add.collider(this.mm, this.groundLayer);
+		
+		this.groundLayer.setTileIndexCallback(17, this.checkCollision, this);
+		this.groundLayer.setTileIndexCallback(18, this.checkCollision, this);
+		this.groundLayer.setTileIndexCallback(19, this.checkCollision, this);
 
 		// power ups
 		this.mm.powerUp = {
-			hasDoubleJump: false,
-			hasSlide: false,
-			hasDrill: false
+			hasDoubleJump: true,
+			hasSlide: true,
+			hasDrill: true
 		}
 	
+		this.ex = this.add.sprite(-50, 0, 'explosion');
   }
-
+  
+  checkCollision(sprite, tile){
+	
+	if(this.fireKey.isDown){
+		
+		this.ex.setPosition(tile.pixelX + 25, tile.pixelY);
+		this.ex.play('explosion')
+	  	this.groundLayer.removeTileAt(tile.x, tile.y);
+		
+	}
+    // Return true to exit processing collision of this tile vs the sprite - in this case, it
+    // doesn't matter since the coin tiles are not set to collide.
+    return false;
+	
+  }
+  
   update() {
 	  
 	  this.moving = true;
@@ -194,7 +219,7 @@ export default class MainScene extends Phaser.Scene {
   
   setMMAnimation(anim){
 	  
-	  if(this.firKey.isDown){
+	  if(this.fireKey.isDown){
 		  anim = anim + "-fire";
 	  }
 	  
