@@ -22,7 +22,7 @@ export default class MainScene extends Phaser.Scene {
 		this.physics.world.setBounds(0, 0, 1920, 320);
 		
 		var map = this.make.tilemap({ key: 'stage' });
-		var tileset = map.addTilesetImage('tileset_sample'/*, 'stage_image'*/);
+		var tileset = map.addTilesetImage('tileset_sample', 'stage_image');
 		var bgLayer = map.createDynamicLayer('background', tileset, 0, 0);
 		var groundLayer = map.createDynamicLayer('foreground', tileset, 0, 0);
 
