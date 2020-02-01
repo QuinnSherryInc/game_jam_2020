@@ -74,6 +74,12 @@ export default class MainScene extends Phaser.Scene {
 			frameRate: 15,
 			repeat: -1
 		});
+
+		this.anims.create({
+			key: 'explosion',
+			frames: this.anims.generateFrameNumbers('explosion', {start: 0, end: 10}),
+			frameRate: 10
+		});
 		
 		this.mm = this.add.sprite(50, 500, 'mm');
 		
