@@ -10,7 +10,7 @@ export default class MainScene extends Phaser.Scene {
   
   preload() {
 	  
-    this.load.tilemapTiledJSON('stage', '../../assets/map/level1.json');
+    this.load.tilemapTiledJSON('stage', '../../assets/map/level2.json');
     this.load.image('stage_image', '../../assets/img/tileset_sample.png');
 }
 
