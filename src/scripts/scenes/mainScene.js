@@ -13,7 +13,6 @@ export default class MainScene extends Phaser.Scene {
     this.load.tilemapTiledJSON('stage', '../../assets/map/level1.json');
     this.load.image('stage_image', '../../assets/img/tileset_sample.png');
 	this.load.spritesheet('mm', '../../assets/img/rover.png', { frameWidth: 48, frameHeight: 32, margin: 0, spacing: 0 });
-	
 }
 
   create() {
@@ -82,7 +81,7 @@ export default class MainScene extends Phaser.Scene {
 			frameRate: 10
 		});
 		
-		this.mm = this.add.sprite(50, 500, 'mm');
+		this.mm = this.add.sprite(0, 100, 'mm');
 		
 		this.mm.anims.play('idle');
 		
@@ -112,13 +111,16 @@ export default class MainScene extends Phaser.Scene {
 			hasDrill: true
 		}
 	
+		this.ex = this.add.sprite(-50, 0, 'explosion');
   }
   
   checkCollision(sprite, tile){
 	
 	if(this.fireKey.isDown){
 		
-	  this.groundLayer.removeTileAt(tile.x, tile.y);
+		this.ex.setPosition(tile.pixelX + 25, tile.pixelY);
+		this.ex.play('explosion')
+	  	this.groundLayer.removeTileAt(tile.x, tile.y);
 		
 	}
     // Return true to exit processing collision of this tile vs the sprite - in this case, it
