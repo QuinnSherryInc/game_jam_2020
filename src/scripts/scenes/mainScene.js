@@ -58,7 +58,7 @@ export default class MainScene extends Phaser.Scene {
 		this.cameras.main.startFollow(this.mm, true);
 		this.groundLayer.setCollisionBetween(1,147);
 		this.physics.add.collider(this.mm, this.groundLayer);
-		this.physics.add.overlap(this.mm, this.groundLayer);
+		//this.physics.add.overlap(this.mm, this.groundLayer);
 		
 		this.groundLayer.setTileIndexCallback([1,3,4,2,20], this.checkCollision, this);
 		this.groundLayer.setTileIndexCallback([14,15,16], this.checkDrillingCollision, this);
@@ -77,6 +77,21 @@ export default class MainScene extends Phaser.Scene {
 			()=>{ this.showReadyText("Go!"); });
 		
 		//this.showDarkMode(true);
+		
+		this.emitter0 = this.add.particles('spark')
+		.createEmitter({
+			x: 0,
+			y: 0, 
+			speed: { min: -800, max: 800 },
+			angle: { min: 0, max: 360 },
+			scale: { start: 0.5, end: 0 },
+			blendMode: 'SCREEN',
+			//active: false,
+			lifespan: 600,
+			gravityY: 0,
+			quantity: 20,
+			active: false
+		});
   }
 
   endGame (sprite, tile) {
@@ -147,8 +162,12 @@ export default class MainScene extends Phaser.Scene {
 	  this.mm.state.hasSlide = true;
 	  
 	  this.removeQuadTile(tile);
+		
+		this.emitter0.active = true;
+		this.emitter0.setPosition(tile.pixelX, tile.pixelY);
+        this.emitter0.explode();
 	  
-	this.showReadyText("Down key to slid!");
+	this.showReadyText("Down key to slide!");
   }
   
   getDJPowerUp(sprite, tile){
@@ -157,7 +176,11 @@ export default class MainScene extends Phaser.Scene {
 	  
 	  this.removeQuadTile(tile);
 	  
-	this.showReadyText("Double jump");
+		this.emitter0.active = true;
+		this.emitter0.setPosition(tile.pixelX, tile.pixelY);
+        this.emitter0.explode();
+		
+	this.showReadyText("Up key to double jump!");
   }
   
   getDrillPowerUp(sprite, tile){
@@ -166,7 +189,11 @@ export default class MainScene extends Phaser.Scene {
 	  
 	  this.removeQuadTile(tile);
 	  
-	this.showReadyText("Drill");
+		this.emitter0.active = true;
+		this.emitter0.setPosition(tile.pixelX, tile.pixelY);
+        this.emitter0.explode();
+		
+	this.showReadyText("Space bar to drill");
   }
   
   removeQuadTile(tile){
