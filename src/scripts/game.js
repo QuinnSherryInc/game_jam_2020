@@ -4,6 +4,7 @@ import '@babel/polyfill'
 import MainScene from './scenes/mainScene'
 import WelcomeScene from './scenes/welcomeScene'
 import PreloadScene from './scenes/preloadScene'
+import EndScene from './scenes/endScene'
 
 const DEFAULT_WIDTH = 480
 const DEFAULT_HEIGHT = 320
@@ -21,7 +22,7 @@ const config = {
     width: DEFAULT_WIDTH,
     height: DEFAULT_HEIGHT
   },
-  scene: [PreloadScene, WelcomeScene, MainScene],
+  scene: [PreloadScene, WelcomeScene, MainScene, EndScene],
   physics: {
     default: 'arcade',
     arcade: {
