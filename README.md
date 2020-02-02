@@ -18,9 +18,9 @@
 
 If we have time, we will try to make a native app using Capacitor (Electron)
 
-## How to play:
+## Controls (also shown in start menu):
 
-Jump: up arrow
-Double jump (special): up arrow twice
-Crouch (special): down arrow
-Drill (special): spacebar
+- Jump: up arrow
+- Double jump (special): up arrow twice
+- Crouch (special): down arrow
+- Drill (special): spacebar
