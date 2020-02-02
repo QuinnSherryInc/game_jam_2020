@@ -1,0 +1,8 @@
+{
+  "appId": "com.thegameofthings.roverrunner",
+  "appName": "Rover Runner",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "dist",
+  "cordova": {}
+}
