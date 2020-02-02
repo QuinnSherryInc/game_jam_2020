@@ -30,7 +30,6 @@ export default class MainScene extends Phaser.Scene {
 		this.hills1 = this.add.tileSprite(0, 0, 480, 320, 'hills1').setOrigin(0).setScrollFactor(0);
 		
 		this.groundLayer = map.createDynamicLayer('foreground', tileset, 0, 0);
-
 		
 		this.mm = this.add.sprite(0, 100, 'mm');
 		
@@ -48,9 +47,9 @@ export default class MainScene extends Phaser.Scene {
 			canDrill: true,
 			drillingST: -1,
 
-			hasDoubleJump: true,
-			hasSlide: true,
-			hasDrill: true
+			hasDoubleJump: false,
+			hasSlide: false,
+			hasDrill: false
 		};
 		
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -66,6 +65,12 @@ export default class MainScene extends Phaser.Scene {
 		
 		this.groundLayer.setTileIndexCallback(91, this.getSlidePowerUp, this);
 		this.groundLayer.setTileIndexCallback(107, this.getSlidePowerUp, this);
+		
+		this.groundLayer.setTileIndexCallback(93, this.getDJPowerUp, this);
+		this.groundLayer.setTileIndexCallback(109, this.getDJPowerUp, this);
+		
+		this.groundLayer.setTileIndexCallback(95, this.getDrillPowerUp, this);
+		this.groundLayer.setTileIndexCallback(111, this.getDrillPowerUp, this);
 		
 		this.showReadyText("Get ready...",
 			()=>{ this.showReadyText("Go!"); });
@@ -121,6 +126,24 @@ export default class MainScene extends Phaser.Scene {
 	  this.removeQuadTile(tile);
 	  
 	this.showReadyText("Down key to slid!");
+  }
+  
+  getDJPowerUp(sprite, tile){
+	  
+	  this.mm.state.hasDoubleJump = true;
+	  
+	  this.removeQuadTile(tile);
+	  
+	this.showReadyText("Double jump");
+  }
+  
+  getDrillPowerUp(sprite, tile){
+	  
+	  this.mm.state.hasDrill = true;
+	  
+	  this.removeQuadTile(tile);
+	  
+	this.showReadyText("Drill");
   }
   
   removeQuadTile(tile){
@@ -288,7 +311,7 @@ export default class MainScene extends Phaser.Scene {
 		if(this.mm.state.drilling)
 			anim = anim + '-fire';
 		
-		if(this.cursors.down.isDown)
+		if(this.cursors.down.isDown && this.mm.state.hasSlide)
 			anim = anim + '-duck';
 		
 		if(this.mm.anims.currentAnim.key != anim){
