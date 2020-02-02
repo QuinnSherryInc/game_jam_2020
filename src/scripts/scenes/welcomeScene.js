@@ -13,9 +13,6 @@ export default class WelcomeScene extends Phaser.Scene {
 		this.hills3 = this.add.image(0,0,'hills3').setOrigin(0,0).setScrollFactor(0);
 		this.hills2 = this.add.image(0,0,'hills2').setOrigin(0,0).setScrollFactor(0);
 		this.hills1 = this.add.image(0,0,'hills1').setOrigin(0,0).setScrollFactor(0);
-		
-		//this.mm = this.add.sprite(240, 100, 'mm').setScale(3);
-		//this.mm.anims.play('running');
     
     this.add.image(240, 180, 'title-1');
     this.add.image(240, 180, 'title-rover')

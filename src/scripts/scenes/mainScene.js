@@ -26,6 +26,12 @@ export default class MainScene extends Phaser.Scene {
 		this.hills1 = this.add.tileSprite(0, 0, 480, 320, 'hills1').setOrigin(0).setScrollFactor(0);
 		this.clouds = this.add.tileSprite(0, 0, 480, 320, 'clouds').setOrigin(0).setScrollFactor(0);
 		
+		this.collisionSound = this.sound.add('collision2');
+		this.jumpSound = this.sound.add('jump');
+		this.powerupSound = this.sound.add('power-up');
+		this.themeTune = this.sound.add('theme', { loop: true });
+		this.themeTune.play();
+
 		this.groundLayer = map.createDynamicLayer('foreground', tileset, 0, 0);
 		
 		this.mm = this.add.sprite(0, 100, 'mm');
@@ -92,7 +98,7 @@ export default class MainScene extends Phaser.Scene {
   }
 
   levelEnd (sprite, tile) {
-	  
+	 
 	if(!window.game.state.paused){
 		
 		window.game.state.paused = true;
@@ -217,7 +223,7 @@ export default class MainScene extends Phaser.Scene {
   }
   
   getSlidePowerUp(sprite, tile){
-	  
+	  this.powerupSound.play();
 	  this.mm.state.hasSlide = true;
 	  
 	  this.removeQuadTile(tile);
@@ -230,7 +236,7 @@ export default class MainScene extends Phaser.Scene {
   }
   
   getDJPowerUp(sprite, tile){
-	  
+	  this.powerupSound.play();
 	  this.mm.state.hasDoubleJump = true;
 	  
 	  this.removeQuadTile(tile);
@@ -243,7 +249,7 @@ export default class MainScene extends Phaser.Scene {
   }
   
   getDrillPowerUp(sprite, tile){
-	  
+	  this.powerupSound.play();
 	  this.mm.state.hasDrill = true;
 	  
 	  this.removeQuadTile(tile);
@@ -294,7 +300,7 @@ export default class MainScene extends Phaser.Scene {
   checkCollision(sprite, tile){
 	  
 	if(this.mm.getBounds().bottom > tile.pixelY){
-		
+		this.collisionSound.play();
 		this.scene.restart();
 		
 	}
@@ -347,6 +353,7 @@ export default class MainScene extends Phaser.Scene {
 			this.mm.state.jumping = true;
 			this.setMMAnimation('jump');
 			this.mm.body.setVelocityY(-350);
+			this.jumpSound.play();
 		}
 
 		if (!this.cursors.up.isDown) {
@@ -408,6 +415,7 @@ export default class MainScene extends Phaser.Scene {
 				this.mm.state.doubleJump = true;
 				this.setMMAnimation('jump');
 				this.mm.body.setVelocityY(-250);
+				this.jumpSound.play();
 			}
 	  }
 
