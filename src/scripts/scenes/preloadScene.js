@@ -24,7 +24,7 @@ export default class PreloadScene extends Phaser.Scene {
 		
         this.anims.create({
 			key: 'idle-fire',
-			frames: this.anims.generateFrameNumbers('mm', { start: 0, end: 0 }),
+			frames: this.anims.generateFrameNumbers('mm', { start: 6, end: 7 }),
 			frameRate: 15,
 			repeat: -1
 		});
@@ -38,7 +38,7 @@ export default class PreloadScene extends Phaser.Scene {
 		
         this.anims.create({
 			key: 'jump-fire',
-			frames: this.anims.generateFrameNumbers('mm', { start: 3, end: 3 }),
+			frames: this.anims.generateFrameNumbers('mm', { start: 6, end: 7 }),
 			frameRate: 15,
 			repeat: -1
 		});
@@ -52,16 +52,16 @@ export default class PreloadScene extends Phaser.Scene {
 		
         this.anims.create({
 			key: 'running-fire',
-			frames: this.anims.generateFrameNumbers('mm', { start: 0, end: 0 }),
+			frames: this.anims.generateFrameNumbers('mm', { start: 6, end: 7 }),
 			frameRate: 15,
 			repeat: -1
 		});
 		
         this.anims.create({
-			key: 'duck',
-			frames: this.anims.generateFrameNumbers('mm', { start: 5, end: 5, first: 4 }),
-			frameRate: 15,
-			repeat: -1
+			key: 'running-duck',
+			frames: this.anims.generateFrameNumbers('mm', { start: 4, end: 5 }),
+			frameRate: 25,
+			repeat: 0
 		});
 
 		this.anims.create({

@@ -11,7 +11,8 @@ export default class MainScene extends Phaser.Scene {
   preload() {
 	  
     this.load.tilemapTiledJSON('stage', '../../assets/map/level1.json');
-    this.load.image('stage_image', '../../assets/img/tileset_sample.png');
+	this.load.image('stage_image', '../../assets/img/tileset_sample.png');
+	
 }
 
   create() {
@@ -43,11 +44,13 @@ export default class MainScene extends Phaser.Scene {
 		
 		this.mm.state = {
 			jumping: true,
-			
+			drilling: false,
+			canDrill: true,
+			drillingST: -1,
+
 			hasDoubleJump: true,
 			hasSlide: true,
-			hasDrill: true,
-			hasTorch: true
+			hasDrill: true
 		};
 		
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -56,14 +59,15 @@ export default class MainScene extends Phaser.Scene {
 		this.cameras.main.startFollow(this.mm, true);
 		this.groundLayer.setCollisionBetween(1,147);
 		this.physics.add.collider(this.mm, this.groundLayer);
+		this.physics.add.overlap(this.mm, this.groundLayer);
 		
-		this.groundLayer.setTileIndexCallback([1,2,3,4,5,9], this.checkCollision, this);
+		this.groundLayer.setTileIndexCallback([2,20], this.checkCollision, this);
 		this.groundLayer.setTileIndexCallback(91, this.getSlidePowerUp, this);
 		this.groundLayer.setTileIndexCallback(107, this.getSlidePowerUp, this);
-	
+		
 		this.showReadyText("Get ready...",
 			()=>{ this.showReadyText("Go!"); });
-
+		
 		//this.showDarkMode(true);
   }
 
@@ -129,31 +133,53 @@ export default class MainScene extends Phaser.Scene {
   }
   
   checkCollision(sprite, tile){
-	
-	if(this.fireKey.isDown){
+	  
+	if(this.mm.state.drilling){
 		
-		var newExplosion = this.add.sprite(-50, 0, 'explosion');
-		newExplosion.on('animationcomplete', () => {
-			newExplosion.destroy();
-		});
-		newExplosion.setPosition(tile.pixelX + 25, tile.pixelY);
-		newExplosion.play('explosion')
-		this.groundLayer.removeTileAt(tile.x, tile.y);
-	
+		var newExplosion = this.add.sprite(-50, 0, 'explosion').setScale(0.5);
+		var newExplosion2 = this.add.sprite(-50, 0, 'explosion').setScale(0.5);
+		
+		newExplosion.on('animationcomplete', () => { newExplosion.destroy(); });
+		newExplosion2.on('animationcomplete', () => { newExplosion2.destroy(); });
+		
+		newExplosion.setPosition(this.mm.x + 45, this.mm.y);
+		newExplosion2.setPosition(this.mm.x + 45, this.mm.y - 16);
+		
+		newExplosion.play('explosion');
+		newExplosion2.play('explosion');
+		
+		this.removeQuadTile(tile);
+		
+	} else {
+		
+		if(this.mm.getBounds().bottom > tile.pixelY){
+			
+			this.scene.restart();
+			
+		}
 		
 	}
+	
+	
     // Return true to exit processing collision of this tile vs the sprite - in this case, it
     // doesn't matter since the coin tiles are not set to collide.
     return false;
 	
   }
   
-  update() {
+  update(time) {
 	  this.hills1.tilePositionX = this.cameras.main.scrollX/2;
 	  this.hills2.tilePositionX = this.cameras.main.scrollX/4;
 	  this.hills3.tilePositionX = this.cameras.main.scrollX/8;
 	  
 	  this.moving = true;
+	  
+	  if(time - this.mm.state.drillingST > 500 && this.mm.state.drilling){
+		  
+		  this.mm.state.drilling = false;
+		  this.setMMAnimation('running');
+		  
+	  }
 	  
 	  if(this.mm.body.onFloor()){
 		  
@@ -192,19 +218,26 @@ export default class MainScene extends Phaser.Scene {
 		
 		if (this.cursors.down.isDown && !this.mm.state.jumping && this.mm.state.hasSlide) {
 			keyDown = true;
-			this.setMMAnimation('duck');
 			this.mm.body.setSize(48, 16);
 			this.mm.body.setOffset(0, 16);
 		} else {
 			this.mm.body.setSize(48, 32);
 			this.mm.body.setOffset(0, 0);
 		}
-		
-		if(!keyDown) {
+
+		if(this.fireKey.isDown){
 			
-			this.setMMAnimation('idle');
+			if(this.mm.state.hasDrill && this.mm.state.canDrill && !this.mm.state.drilling) {
+				
+				this.mm.state.drilling = true;
+				this.mm.state.drillingST = time;
+				this.mm.state.canDrill = false;
+				
+			}
+
+		} else {
 			
-			this.mm.body.setVelocityX(0);
+			this.mm.state.canDrill = true;
 			
 		}
 		
@@ -245,17 +278,18 @@ export default class MainScene extends Phaser.Scene {
 	  
   }
   
-  setMMAnimation(anim){
-	  
-	  if(this.fireKey.isDown){
-		  anim = anim + "-fire";
-	  }
-	  
-	  if(this.mm.anims.currentAnim.key != anim){
-		  
-		  this.mm.anims.play(anim);
-		  
-	  }
-	  
-  }
+	setMMAnimation(anim){
+		if(this.mm.state.drilling)
+			anim = anim + '-fire';
+		
+		if(this.cursors.down.isDown)
+			anim = anim + '-duck';
+		
+		if(this.mm.anims.currentAnim.key != anim){
+			
+			this.mm.anims.play(anim);
+			
+		}
+		
+	}
 }
