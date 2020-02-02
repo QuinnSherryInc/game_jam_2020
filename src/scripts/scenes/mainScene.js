@@ -24,7 +24,14 @@ export default class MainScene extends Phaser.Scene {
 		this.hills3 = this.add.tileSprite(0, 0, 480, 320, 'hills3').setOrigin(0).setScrollFactor(0);
 		this.hills2 = this.add.tileSprite(0, 0, 480, 320, 'hills2').setOrigin(0).setScrollFactor(0);
 		this.hills1 = this.add.tileSprite(0, 0, 480, 320, 'hills1').setOrigin(0).setScrollFactor(0);
+		this.clouds = this.add.tileSprite(0, 0, 480, 320, 'clouds').setOrigin(0).setScrollFactor(0);
 		
+		this.collisionSound = this.sound.add('collision2');
+		this.jumpSound = this.sound.add('jump');
+		this.powerupSound = this.sound.add('power-up');
+		this.themeTune = this.sound.add('theme', { loop: true });
+		this.themeTune.play();
+
 		this.groundLayer = map.createDynamicLayer('foreground', tileset, 0, 0);
 		
 		this.mm = this.add.sprite(0, 100, 'mm');
@@ -61,7 +68,7 @@ export default class MainScene extends Phaser.Scene {
 		
 		this.groundLayer.setTileIndexCallback(91, this.getSlidePowerUp, this);
 		this.groundLayer.setTileIndexCallback(107, this.getSlidePowerUp, this);
-		this.groundLayer.setTileIndexCallback(126, this.endGame, this);
+		this.groundLayer.setTileIndexCallback(126, this.levelEnd, this);
 		
 		this.groundLayer.setTileIndexCallback(93, this.getDJPowerUp, this);
 		this.groundLayer.setTileIndexCallback(109, this.getDJPowerUp, this);
@@ -90,53 +97,86 @@ export default class MainScene extends Phaser.Scene {
 		});
   }
 
-  endGame (sprite, tile) {
-	/*
-	if(!this.ak) {
-		var meteor = this.add.image(this.mm.x + 200, this.mm.y - 300, 'meteorite').setScale(0.03);
-		meteor.setAngle(150);
-		this.tweens.add({
-			targets: meteor,
-			props: {
-				x: this.mm.x + 15,
-				y: this.mm.y - 10,
-				scale: 0.3
-			},
-			duration: 2000,
-			onComplete: () => {
-				meteor.destroy();
-				var newExplosion = this.add.sprite(this.mm.x, this.mm.y - 10, 'explosion');
-				newExplosion.play('explosion-loop');
-			}
-		}, this);
-		this.ak = true
-	}*/
-	
+  levelEnd (sprite, tile) {
+	 
 	if(!window.game.state.paused){
+		
 		window.game.state.paused = true;
 		
-		this.showReadyText("Great job!");
-	
-		var transitionTexture = this.add.image(240, 160, "scene-transition")
-			.setScrollFactor(0)
-			.setOrigin(.5,.5)
-			.setScale(0);
 		
-		this.tweens.add({
+		  if(this.game.state.level1){
+		
+				this.showReadyText("Great job!");
 			
-			targets: transitionTexture,
+				var transitionTexture = this.add.image(240, 160, "scene-transition")
+					.setScrollFactor(0)
+					.setOrigin(.5,.5)
+					.setScale(0);
+				
+				this.tweens.add({
+					
+					targets: transitionTexture,
+					
+					scaleX: 15,
+					scaleY: 15,
+					angle: 1080,
+					duration: 3000,
+					delay: 2000,
+					
+					onComplete: ()=>{
+						window.game.state.level++;
+						this.scene.restart({ level: window.game.state.level });
+					}
+				});
+			  
+		  } else {
+			  
+				if(!this.ak) {
+					var meteor = this.add.image(this.mm.x + 200, this.mm.y - 300, 'meteorite').setScale(0.03);
+					meteor.setAngle(150);
+					this.tweens.add({
+						targets: meteor,
+						props: {
+							x: this.mm.x + 15,
+							y: this.mm.y - 10,
+							scale: 0.3
+						},
+						duration: 2000,
+						onComplete: () => {
+							meteor.destroy();
+							var newExplosion = this.add.sprite(this.mm.x, this.mm.y - 10, 'explosion');
+							newExplosion.play('explosion-loop');
+							
+						}
+					}, this);
+					this.ak = true
+				}
 			
-			scaleX: 15,
-			scaleY: 15,
-			angle: 1080,
-			duration: 3000,
-			delay: 2000,
+				this.showReadyText("Oh shit!");
+				
+				var transitionTexture = this.add.image(240, 160, "scene-transition")
+					.setScrollFactor(0)
+					.setOrigin(.5,.5)
+					.setScale(0);
+				this.tweens.add({
+					
+					targets: transitionTexture,
+					
+					scaleX: 15,
+					scaleY: 15,
+					angle: 1080,
+					duration: 3000,
+					delay: 2000,
+					
+					onComplete: ()=>{
+						
+						window.game.state.level++;
+						this.scene.restart({ level: window.game.state.level });
+					}
+				});
 			
-			onComplete: ()=>{
-				window.game.state.level++;
-				this.scene.restart({ level: window.game.state.level });
-			}
-		});
+			  
+		  }
 	}
 	
   }
@@ -183,7 +223,7 @@ export default class MainScene extends Phaser.Scene {
   }
   
   getSlidePowerUp(sprite, tile){
-	  
+	  this.powerupSound.play();
 	  this.mm.state.hasSlide = true;
 	  
 	  this.removeQuadTile(tile);
@@ -196,7 +236,7 @@ export default class MainScene extends Phaser.Scene {
   }
   
   getDJPowerUp(sprite, tile){
-	  
+	  this.powerupSound.play();
 	  this.mm.state.hasDoubleJump = true;
 	  
 	  this.removeQuadTile(tile);
@@ -209,7 +249,7 @@ export default class MainScene extends Phaser.Scene {
   }
   
   getDrillPowerUp(sprite, tile){
-	  
+	  this.powerupSound.play();
 	  this.mm.state.hasDrill = true;
 	  
 	  this.removeQuadTile(tile);
@@ -260,7 +300,7 @@ export default class MainScene extends Phaser.Scene {
   checkCollision(sprite, tile){
 	  
 	if(this.mm.getBounds().bottom > tile.pixelY){
-		
+		this.collisionSound.play();
 		this.scene.restart();
 		
 	}
@@ -272,6 +312,8 @@ export default class MainScene extends Phaser.Scene {
   }
   
   update(time) {
+	  
+	  this.clouds.tilePositionX += 1;
 	  this.hills1.tilePositionX = this.cameras.main.scrollX/2;
 	  this.hills2.tilePositionX = this.cameras.main.scrollX/4;
 	  this.hills3.tilePositionX = this.cameras.main.scrollX/8;
@@ -311,6 +353,7 @@ export default class MainScene extends Phaser.Scene {
 			this.mm.state.jumping = true;
 			this.setMMAnimation('jump');
 			this.mm.body.setVelocityY(-350);
+			this.jumpSound.play();
 		}
 
 		if (!this.cursors.up.isDown) {
@@ -372,6 +415,7 @@ export default class MainScene extends Phaser.Scene {
 				this.mm.state.doubleJump = true;
 				this.setMMAnimation('jump');
 				this.mm.body.setVelocityY(-250);
+				this.jumpSound.play();
 			}
 	  }
 
