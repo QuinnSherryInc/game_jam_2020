@@ -33,4 +33,10 @@ const config = {
 
 window.addEventListener('load', () => {
   window.game = new Phaser.Game(config);
+  
+  window.game.state = {
+	  
+	  paused: false,
+	  level: 1
+  };
 })

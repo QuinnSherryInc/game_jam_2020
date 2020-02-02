@@ -7,17 +7,13 @@ export default class MainScene extends Phaser.Scene {
   constructor() {
     super({ key: 'MainScene' })
   }
-  
-  preload() {
-	  
-    this.load.tilemapTiledJSON('stage', '../../assets/map/level1.json');
-	this.load.image('stage_image', '../../assets/img/tileset_sample.png');
-	
-}
 
-  create() {
-	  
-		var map = this.make.tilemap({ key: 'stage' });
+  create(data) {
+		
+		data = data || {};
+		this.level = data.level || 1;
+		
+		var map = this.make.tilemap({ key: 'level' + this.level });
 		
 		this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 		this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
@@ -73,7 +69,7 @@ export default class MainScene extends Phaser.Scene {
 		this.groundLayer.setTileIndexCallback(95, this.getDrillPowerUp, this);
 		this.groundLayer.setTileIndexCallback(111, this.getDrillPowerUp, this);
 		
-		this.showReadyText("Get ready...",
+		this.showReadyText("Level " + this.level,
 			()=>{ this.showReadyText("Go!"); });
 		
 		//this.showDarkMode(true);
@@ -95,6 +91,7 @@ export default class MainScene extends Phaser.Scene {
   }
 
   endGame (sprite, tile) {
+	/*
 	if(!this.ak) {
 		var meteor = this.add.image(this.mm.x + 200, this.mm.y - 300, 'meteorite').setScale(0.03);
 		meteor.setAngle(150);
@@ -113,7 +110,35 @@ export default class MainScene extends Phaser.Scene {
 			}
 		}, this);
 		this.ak = true
+	}*/
+	
+	if(!window.game.state.paused){
+		window.game.state.paused = true;
+		
+		this.showReadyText("Great job!");
+	
+		var transitionTexture = this.add.image(240, 160, "scene-transition")
+			.setScrollFactor(0)
+			.setOrigin(.5,.5)
+			.setScale(0);
+		
+		this.tweens.add({
+			
+			targets: transitionTexture,
+			
+			scaleX: 15,
+			scaleY: 15,
+			angle: 1080,
+			duration: 3000,
+			delay: 2000,
+			
+			onComplete: ()=>{
+				window.game.state.level++;
+				this.scene.restart({ level: window.game.state.level });
+			}
+		});
 	}
+	
   }
 
   showDarkMode(show) {
