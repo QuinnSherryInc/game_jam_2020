@@ -157,7 +157,7 @@ export default class MainScene extends Phaser.Scene {
 	  
 	  this.removeQuadTile(tile);
 	  
-	this.showReadyText("Double jump");
+	this.showReadyText("Up key to double jump!");
   }
   
   getDrillPowerUp(sprite, tile){
@@ -166,7 +166,7 @@ export default class MainScene extends Phaser.Scene {
 	  
 	  this.removeQuadTile(tile);
 	  
-	this.showReadyText("Drill");
+	this.showReadyText("Space bar to drill");
   }
   
   removeQuadTile(tile){
