@@ -32,6 +32,11 @@ export default class PreloadScene extends Phaser.Scene {
     this.load.image('jump-power', 'assets/img/double-jump.png');
     this.load.image('slide-power', 'assets/img/slide.png');
     this.load.image('scene-transition', 'assets/img/scene-transition.png');
+
+    this.load.image('title-1', 'assets/img/title.png');
+    this.load.image('title-2', 'assets/img/title1.png');
+    this.load.image('title-rover', 'assets/img/title-rover.png')
+>>>>>>> aab829eeb0c08db988bab9ae5cf032d6a12b7a99
   }
 
   create() {

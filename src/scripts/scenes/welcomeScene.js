@@ -14,12 +14,15 @@ export default class WelcomeScene extends Phaser.Scene {
 		this.hills2 = this.add.image(0,0,'hills2').setOrigin(0,0).setScrollFactor(0);
 		this.hills1 = this.add.image(0,0,'hills1').setOrigin(0,0).setScrollFactor(0);
 		
-		this.mm = this.add.sprite(240, 100, 'mm').setScale(3);
-		this.mm.anims.play('running');
-		
+		//this.mm = this.add.sprite(240, 100, 'mm').setScale(3);
+		//this.mm.anims.play('running');
+    
+    this.add.image(240, 180, 'title-1');
+    this.add.image(240, 180, 'title-rover')
+    
 	  this.add.sprite(240,220, 'start-button');
 
-    this.add.text(100, 50, 'Game Controls', {
+    this.add.text(400, 50 + 60, 'Game Controls', {
       fontSize: '16px',
       color: 'black',
       fontFamily: 'Courier'
@@ -30,19 +33,19 @@ export default class WelcomeScene extends Phaser.Scene {
       color: 'black',
       fontFamily: 'Courier'
     };
-    this.add.text(30, 70, 'Jump: ', style).setOrigin(0, 0.5);
-    this.add.image(100, 70, 'up-key').setOrigin(0, .5);
+    this.add.text(330, 130, 'Jump: ', style).setOrigin(0, 0.5);
+    this.add.image(400, 130, 'up-key').setOrigin(0, .5);
 
-    this.add.text(30, 90, 'Slide: ', style).setOrigin(0, 0.5);
-    this.add.image(100, 90, 'down-key').setOrigin(0, 0.5);
+    this.add.text(330, 150, 'Slide: ', style).setOrigin(0, 0.5);
+    this.add.image(400, 150, 'down-key').setOrigin(0, 0.5);
 
-    this.add.text(30, 110, 'Drill: ', style).setOrigin(0, 0.5);
-    this.add.image(100, 110, 'space-bar').setOrigin(0, 0.5);
+    this.add.text(330, 170, 'Drill: ', style).setOrigin(0, 0.5);
+    this.add.image(400, 170, 'space-bar').setOrigin(0, 0.5);
 
-    this.add.text(30, 130, 'Double Jump: ', style).setOrigin(0, 0.5);
-    this.add.image(120, 130, 'up-key').setOrigin(0, 0.5);
-    this.add.text(140, 130, '+', style).setOrigin(0, 0.5);
-    this.add.image(150, 130, 'up-key').setOrigin(0, 0.5);
+    this.add.text(330, 190, 'Double Jump: ', style).setOrigin(0, 0.5);
+    this.add.image(420, 190, 'up-key').setOrigin(0, 0.5);
+    this.add.text(440, 190, '+', style).setOrigin(0, 0.5);
+    this.add.image(450, 190, 'up-key').setOrigin(0, 0.5);
 	
 	  this.add.image(240,220, 'start-button').setInteractive().on("pointerup", ()=>{
 		  
