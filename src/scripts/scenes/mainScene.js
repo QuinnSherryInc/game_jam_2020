@@ -61,7 +61,9 @@ export default class MainScene extends Phaser.Scene {
 		this.physics.add.collider(this.mm, this.groundLayer);
 		this.physics.add.overlap(this.mm, this.groundLayer);
 		
-		this.groundLayer.setTileIndexCallback([2,20], this.checkCollision, this);
+		this.groundLayer.setTileIndexCallback([1,3,4,2,20], this.checkCollision, this);
+		this.groundLayer.setTileIndexCallback([14,15,16], this.checkDrillingCollision, this);
+		
 		this.groundLayer.setTileIndexCallback(91, this.getSlidePowerUp, this);
 		this.groundLayer.setTileIndexCallback(107, this.getSlidePowerUp, this);
 		this.groundLayer.setTileIndexCallback(126, this.endGame, this);
@@ -154,8 +156,7 @@ export default class MainScene extends Phaser.Scene {
 	this.groundLayer.removeTileAt(tile.x+1, tile.y-1);
 	  
   }
-  
-  checkCollision(sprite, tile){
+  checkDrillingCollision(sprite, tile){
 	  
 	if(this.mm.state.drilling){
 		
@@ -171,18 +172,23 @@ export default class MainScene extends Phaser.Scene {
 		newExplosion.play('explosion');
 		newExplosion2.play('explosion');
 		
+		this.mm.state.drilling = false;
 		this.removeQuadTile(tile);
 		
 	} else {
 		
-		if(this.mm.getBounds().bottom > tile.pixelY){
-			
-			this.scene.restart();
-			
-		}
+		this.scene.restart();
 		
 	}
-	
+  }
+  
+  checkCollision(sprite, tile){
+	  
+	if(this.mm.getBounds().bottom > tile.pixelY){
+		
+		this.scene.restart();
+		
+	}
 	
     // Return true to exit processing collision of this tile vs the sprite - in this case, it
     // doesn't matter since the coin tiles are not set to collide.
