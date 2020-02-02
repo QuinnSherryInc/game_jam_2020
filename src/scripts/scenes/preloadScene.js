@@ -23,6 +23,10 @@ export default class PreloadScene extends Phaser.Scene {
     this.load.image('drill-power', 'assets/img/drill.png');
     this.load.image('jump-power', 'assets/img/double-jump.png');
     this.load.image('slide-power', 'assets/img/slide.png');
+
+    this.load.image('title-1', 'assets/img/title.png');
+    this.load.image('title-2', 'assets/img/title1.png');
+    this.load.image('title-rover', 'assets/img/title-rover.png')
   }
 
   create() {
