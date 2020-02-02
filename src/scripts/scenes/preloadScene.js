@@ -4,12 +4,12 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.tilemapTiledJSON('level1', '../../assets/map/level1.json');
-    this.load.tilemapTiledJSON('level2', '../../assets/map/level2.json');
-    this.load.tilemapTiledJSON('level3', '../../assets/map/level3.json');
-    this.load.tilemapTiledJSON('level4', '../../assets/map/level4.json');
-    this.load.tilemapTiledJSON('level5', '../../assets/map/level5.json');
-	this.load.image('stage_image', '../../assets/img/tileset_sample.png');
+    this.load.tilemapTiledJSON('level1', 'assets/map/level1.json');
+    this.load.tilemapTiledJSON('level2', 'assets/map/level2.json');
+    this.load.tilemapTiledJSON('level3', 'assets/map/level3.json');
+    this.load.tilemapTiledJSON('level4', 'assets/map/level4.json');
+    this.load.tilemapTiledJSON('level5', 'assets/map/level5.json');
+	this.load.image('stage_image', 'assets/img/tileset_sample.png');
 	
 	
     this.load.image('backround', 'assets/img/Background.png');
