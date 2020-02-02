@@ -64,11 +64,34 @@ export default class MainScene extends Phaser.Scene {
 		this.groundLayer.setTileIndexCallback([2,20], this.checkCollision, this);
 		this.groundLayer.setTileIndexCallback(91, this.getSlidePowerUp, this);
 		this.groundLayer.setTileIndexCallback(107, this.getSlidePowerUp, this);
+		this.groundLayer.setTileIndexCallback(126, this.endGame, this);
 		
 		this.showReadyText("Get ready...",
 			()=>{ this.showReadyText("Go!"); });
 		
 		//this.showDarkMode(true);
+  }
+
+  endGame (sprite, tile) {
+	if(!this.ak) {
+		var meteor = this.add.image(this.mm.x + 200, this.mm.y - 300, 'meteorite').setScale(0.03);
+		meteor.setAngle(150);
+		this.tweens.add({
+			targets: meteor,
+			props: {
+				x: this.mm.x + 15,
+				y: this.mm.y - 10,
+				scale: 0.3
+			},
+			duration: 2000,
+			onComplete: () => {
+				meteor.destroy();
+				var newExplosion = this.add.sprite(this.mm.x, this.mm.y - 10, 'explosion');
+				newExplosion.play('explosion-loop');
+			}
+		}, this);
+		this.ak = true
+	}
   }
 
   showDarkMode(show) {
