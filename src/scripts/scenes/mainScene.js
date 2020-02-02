@@ -69,7 +69,7 @@ export default class MainScene extends Phaser.Scene {
 		
 		this.groundLayer.setTileIndexCallback(91, this.getSlidePowerUp, this);
 		this.groundLayer.setTileIndexCallback(107, this.getSlidePowerUp, this);
-		this.groundLayer.setTileIndexCallback(126, this.endGame, this);
+		this.groundLayer.setTileIndexCallback(126, this.levelEnd, this);
 		
 		this.groundLayer.setTileIndexCallback(93, this.getDJPowerUp, this);
 		this.groundLayer.setTileIndexCallback(109, this.getDJPowerUp, this);
@@ -98,54 +98,108 @@ export default class MainScene extends Phaser.Scene {
 		});
   }
 
-  endGame (sprite, tile) {
-	/*
-	if(!this.ak) {
-		this.themeTune.pause();
-		var meteor = this.add.image(this.mm.x + 200, this.mm.y - 300, 'meteorite').setScale(0.03);
-		meteor.setAngle(150);
-		this.tweens.add({
-			targets: meteor,
-			props: {
-				x: this.mm.x + 15,
-				y: this.mm.y - 10,
-				scale: 0.3
-			},
-			duration: 2000,
-			onComplete: () => {
-				meteor.destroy();
-				var newExplosion = this.add.sprite(this.mm.x, this.mm.y - 10, 'explosion');
-				newExplosion.play('explosion-loop');
-			}
-		}, this);
-		this.ak = true
-	}*/
-	
+  levelEnd (sprite, tile) {
+	 
 	if(!window.game.state.paused){
+		
 		window.game.state.paused = true;
 		
-		this.showReadyText("Great job!");
-	
-		var transitionTexture = this.add.image(240, 160, "scene-transition")
-			.setScrollFactor(0)
-			.setOrigin(.5,.5)
-			.setScale(0);
+		  if(this.game.state.level == 5){
+			  
+			  
+				var transitionTexture = this.add.image(240, 160, "scene-transition")
+					.setScrollFactor(0)
+					.setOrigin(.5,.5)
+					.setScale(0);
+				this.tweens.add({
+					
+					targets: transitionTexture,
+					
+					scaleX: 15,
+					scaleY: 15,
+					angle: 1080,
+					duration: 3000,
+					delay: 2000,
+					
+					onComplete: ()=>{
+						
+						this.scene.switch("EndScene");
+					}
+				});
+		  }
+		  else if(this.game.state.level == 1){
+			  
+				if(!this.ak) {
+					var meteor = this.add.image(this.mm.x + 200, this.mm.y - 300, 'meteorite').setScale(0.03);
+					meteor.setAngle(150);
+					this.tweens.add({
+						targets: meteor,
+						props: {
+							x: this.mm.x + 15,
+							y: this.mm.y - 10,
+							scale: 0.3
+						},
+						duration: 2000,
+						onComplete: () => {
+							meteor.destroy();
+							var newExplosion = this.add.sprite(this.mm.x, this.mm.y - 10, 'explosion');
+							newExplosion.play('explosion-loop');
+							
+						}
+					}, this);
+					this.ak = true
+				}
+			
+				this.showReadyText("Oh shit!");
+				
+				var transitionTexture = this.add.image(240, 160, "scene-transition")
+					.setScrollFactor(0)
+					.setOrigin(.5,.5)
+					.setScale(0);
+				this.tweens.add({
+					
+					targets: transitionTexture,
+					
+					scaleX: 15,
+					scaleY: 15,
+					angle: 1080,
+					duration: 3000,
+					delay: 2000,
+					
+					onComplete: ()=>{
+						
+						window.game.state.level++;
+						this.scene.restart({ level: window.game.state.level });
+					}
+				});
+			
+			  
+		  } else {
 		
-		this.tweens.add({
+				this.showReadyText("Great job!");
 			
-			targets: transitionTexture,
-			
-			scaleX: 15,
-			scaleY: 15,
-			angle: 1080,
-			duration: 3000,
-			delay: 2000,
-			
-			onComplete: ()=>{
-				window.game.state.level++;
-				this.scene.restart({ level: window.game.state.level });
-			}
-		});
+				var transitionTexture = this.add.image(240, 160, "scene-transition")
+					.setScrollFactor(0)
+					.setOrigin(.5,.5)
+					.setScale(0);
+				
+				this.tweens.add({
+					
+					targets: transitionTexture,
+					
+					scaleX: 15,
+					scaleY: 15,
+					angle: 1080,
+					duration: 3000,
+					delay: 2000,
+					
+					onComplete: ()=>{
+						window.game.state.level++;
+						this.scene.restart({ level: window.game.state.level });
+					}
+				});
+			  
+		  }
 	}
 	
   }
