@@ -53,7 +53,7 @@ export default class MainScene extends Phaser.Scene {
 		};
 		
         this.cursors = this.input.keyboard.createCursorKeys();
-		this.fireKey = this.input.keyboard.addKey('F');  // Get key object
+		this.fireKey = this.input.keyboard.addKey('SPACE');  // Get key object
 		
 		this.cameras.main.startFollow(this.mm, true);
 		this.groundLayer.setCollisionBetween(1,147);
