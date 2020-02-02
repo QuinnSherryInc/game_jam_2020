@@ -12,6 +12,7 @@ export default class PreloadScene extends Phaser.Scene {
     this.load.bitmapFont('ice', 'assets/font/iceicebaby.png', 'assets/font/iceicebaby.xml');
     this.load.spritesheet('mm', 'assets/img/rover.png', { frameWidth: 48, frameHeight: 32, margin: 0, spacing: 0 });
     this.load.image('mask', 'assets/img/mask.png');
+    this.load.image('meteorite', 'assets/img/meteorite.png');
   }
 
   create() {
@@ -68,6 +69,13 @@ export default class PreloadScene extends Phaser.Scene {
 			key: 'explosion',
 			frames: this.anims.generateFrameNumbers('explosion', {start: 0, end: 10}),
 			frameRate: 10
+    });
+    
+    this.anims.create({
+			key: 'explosion-loop',
+			frames: this.anims.generateFrameNumbers('explosion', {start: 0, end: 10}),
+      frameRate: 10,
+      repeat: -1
 		});
     this.scene.start('WelcomeScene')
 
