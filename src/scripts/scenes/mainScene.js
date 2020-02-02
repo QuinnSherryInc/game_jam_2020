@@ -12,6 +12,7 @@ export default class MainScene extends Phaser.Scene {
 		
 		data = data || {};
 		this.level = data.level || 1;
+		window.game.state.paused = false;
 		
 		var map = this.make.tilemap({ key: 'level' + this.level });
 		
