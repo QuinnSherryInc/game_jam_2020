@@ -18,6 +18,10 @@ export default class PreloadScene extends Phaser.Scene {
     this.load.image('up-key', 'assets/img/up-key.png');
     this.load.image('down-key', 'assets/img/down-key.png');
     this.load.image('space-bar', 'assets/img/space-bar.png');
+
+    this.load.image('drill-power', 'assets/img/drill.png');
+    this.load.image('jump-power', 'assets/img/double-jump.png');
+    this.load.image('slide-power', 'assets/img/slide.png');
   }
 
   create() {
