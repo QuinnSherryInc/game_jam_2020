@@ -50,11 +50,7 @@ export default class MainScene extends Phaser.Scene {
 			jumping: true,
 			drilling: false,
 			canDrill: true,
-			drillingST: -1,
-
-			hasDoubleJump: false,
-			hasSlide: false,
-			hasDrill: false
+			drillingST: -1
 		};
 		
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -129,7 +125,10 @@ export default class MainScene extends Phaser.Scene {
 				});
 		  }
 		  else if(this.game.state.level == 1){
-			  
+				window.game.state.hasSlide = false;
+				window.game.state.hasDoubleJump = false;
+				window.game.state.hasDrill = false;
+				
 				if(!this.ak) {
 					var meteor = this.add.image(this.mm.x + 200, this.mm.y - 300, 'meteorite').setScale(0.03);
 					meteor.setAngle(150);
@@ -175,7 +174,19 @@ export default class MainScene extends Phaser.Scene {
 				});
 			
 			  
-		  } else {
+		  	} else if(this.game.state.level == 2){
+				
+				window.game.state.hasSlide = false;
+		  
+			} else if(this.game.state.level == 3){
+				
+				window.game.state.hasDoubleJump = false;
+		  
+			} else if(this.game.state.level == 4){
+				
+				window.game.state.hasDrill = false;
+		  
+			} else {
 		
 				this.showReadyText("Great job!");
 			
@@ -248,7 +259,7 @@ export default class MainScene extends Phaser.Scene {
   
   getSlidePowerUp(sprite, tile){
 	  this.powerupSound.play();
-	  this.mm.state.hasSlide = true;
+	  window.game.state.hasSlide = true;
 	  
 	  this.removeQuadTile(tile);
 		
@@ -261,7 +272,7 @@ export default class MainScene extends Phaser.Scene {
   
   getDJPowerUp(sprite, tile){
 	  this.powerupSound.play();
-	  this.mm.state.hasDoubleJump = true;
+	  window.game.state.hasDoubleJump = true;
 	  
 	  this.removeQuadTile(tile);
 	  
@@ -274,7 +285,7 @@ export default class MainScene extends Phaser.Scene {
   
   getDrillPowerUp(sprite, tile){
 	  this.powerupSound.play();
-	  this.mm.state.hasDrill = true;
+	  window.game.state.hasDrill = true;
 	  
 	  this.removeQuadTile(tile);
 	  
@@ -387,7 +398,7 @@ export default class MainScene extends Phaser.Scene {
 		}
 		
 		
-		if (this.cursors.down.isDown && !this.mm.state.jumping && this.mm.state.hasSlide) {
+		if (this.cursors.down.isDown && !this.mm.state.jumping && window.game.state.hasSlide) {
 			keyDown = true;
 			this.mm.body.setSize(48, 16);
 			this.mm.body.setOffset(0, 16);
@@ -398,7 +409,7 @@ export default class MainScene extends Phaser.Scene {
 
 		if(this.fireKey.isDown){
 			
-			if(this.mm.state.hasDrill && this.mm.state.canDrill && !this.mm.state.drilling) {
+			if(window.game.state.hasDrill && this.mm.state.canDrill && !this.mm.state.drilling) {
 				
 				this.mm.state.drilling = true;
 				this.mm.state.drillingST = time;
@@ -430,7 +441,7 @@ export default class MainScene extends Phaser.Scene {
 				
 			}
 		  
-			if (!this.cursors.up.isDown && this.mm.state.hasDoubleJump) {
+			if (!this.cursors.up.isDown && window.game.state.hasDoubleJump) {
 				this.mm.state.doubleJumpReady = true;
 			}
 
@@ -454,7 +465,7 @@ export default class MainScene extends Phaser.Scene {
 		if(this.mm.state.drilling)
 			anim = anim + '-fire';
 		
-		if(this.cursors.down.isDown && this.mm.state.hasSlide)
+		if(this.cursors.down.isDown && window.game.state.hasSlide)
 			anim = anim + '-duck';
 		
 		if(this.mm.anims.currentAnim.key != anim){

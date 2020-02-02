@@ -36,8 +36,12 @@ window.addEventListener('load', () => {
   window.game = new Phaser.Game(config);
   
   window.game.state = {
-	  
+    
+    hasDoubleJump: false,
+    hasSlide: false,
+    hasDrill: false,
 	  paused: false,
-	  level: 1
+    level: 1
+    
   };
 })
