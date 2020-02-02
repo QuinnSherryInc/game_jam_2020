@@ -24,6 +24,7 @@ export default class MainScene extends Phaser.Scene {
 		this.hills3 = this.add.tileSprite(0, 0, 480, 320, 'hills3').setOrigin(0).setScrollFactor(0);
 		this.hills2 = this.add.tileSprite(0, 0, 480, 320, 'hills2').setOrigin(0).setScrollFactor(0);
 		this.hills1 = this.add.tileSprite(0, 0, 480, 320, 'hills1').setOrigin(0).setScrollFactor(0);
+		this.clouds = this.add.tileSprite(0, 0, 480, 320, 'clouds').setOrigin(0).setScrollFactor(0);
 		
 		this.collisionSound = this.sound.add('collision2');
 		this.jumpSound = this.sound.add('jump');
@@ -279,6 +280,8 @@ export default class MainScene extends Phaser.Scene {
   }
   
   update(time) {
+	  
+	  this.clouds.tilePositionX += 1;
 	  this.hills1.tilePositionX = this.cameras.main.scrollX/2;
 	  this.hills2.tilePositionX = this.cameras.main.scrollX/4;
 	  this.hills3.tilePositionX = this.cameras.main.scrollX/8;
