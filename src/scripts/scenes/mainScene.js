@@ -27,9 +27,10 @@ export default class MainScene extends Phaser.Scene {
 		this.hills1 = this.add.tileSprite(0, 0, 480, 320, 'hills1').setOrigin(0).setScrollFactor(0);
 		this.clouds = this.add.tileSprite(0, 0, 480, 320, 'clouds').setOrigin(0).setScrollFactor(0);
 		
-		this.collisionSound = this.sound.add('collision2');
+		this.collisionSound = this.sound.add('collision');
 		this.jumpSound = this.sound.add('jump');
 		this.powerupSound = this.sound.add('power-up');
+		this.explosionSound = this.sound.add('explosion')
 		this.themeTune = this.sound.add('theme', { loop: true });
 		this.themeTune.play();
 
@@ -309,7 +310,7 @@ export default class MainScene extends Phaser.Scene {
 		
 		newExplosion.play('explosion');
 		newExplosion2.play('explosion');
-		
+		this.explosionSound.play();
 		this.mm.state.drilling = false;
 		this.removeQuadTile(tile);
 		
