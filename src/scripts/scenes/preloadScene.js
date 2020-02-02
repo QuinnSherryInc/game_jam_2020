@@ -13,6 +13,11 @@ export default class PreloadScene extends Phaser.Scene {
     this.load.spritesheet('mm', 'assets/img/rover.png', { frameWidth: 48, frameHeight: 32, margin: 0, spacing: 0 });
     this.load.image('mask', 'assets/img/mask.png');
     this.load.image('meteorite', 'assets/img/meteorite.png');
+    this.load.image('left-key', 'assets/img/left-key.png');
+    this.load.image('right-key', 'assets/img/right-key.png');
+    this.load.image('up-key', 'assets/img/up-key.png');
+    this.load.image('down-key', 'assets/img/down-key.png');
+    this.load.image('space-bar', 'assets/img/space-bar.png');
   }
 
   create() {
