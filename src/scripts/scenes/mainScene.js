@@ -31,6 +31,7 @@ export default class MainScene extends Phaser.Scene {
 		this.jumpSound = this.sound.add('jump');
 		this.powerupSound = this.sound.add('power-up');
 		this.explosionSound = this.sound.add('explosion')
+		window.game.sound.stopAll();
 		this.themeTune = this.sound.add('theme', { loop: true });
 		this.themeTune.play();
 
