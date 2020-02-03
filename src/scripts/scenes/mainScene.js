@@ -27,12 +27,15 @@ export default class MainScene extends Phaser.Scene {
 		this.hills1 = this.add.tileSprite(0, 0, 480, 320, 'hills1').setOrigin(0).setScrollFactor(0);
 		this.clouds = this.add.tileSprite(0, 0, 480, 320, 'clouds').setOrigin(0).setScrollFactor(0);
 		
+		game.sound.stopAll();
+		
 		this.collisionSound = this.sound.add('collision');
 		this.jumpSound = this.sound.add('jump');
 		this.powerupSound = this.sound.add('power-up');
-		this.explosionSound = this.sound.add('explosion')
-		window.game.sound.stopAll();
+		this.explosionSound = this.sound.add('explosion');
+
 		this.themeTune = this.sound.add('theme', { loop: true });
+		
 		this.themeTune.play();
 
 		this.groundLayer = map.createDynamicLayer('foreground', tileset, 0, 0);
@@ -153,6 +156,8 @@ export default class MainScene extends Phaser.Scene {
 			
 				this.showReadyText("Oh shit!");
 				
+				game.sound.stopAll();
+				
 				var transitionTexture = this.add.image(240, 160, "scene-transition")
 					.setScrollFactor(0)
 					.setOrigin(.5,.5)
@@ -204,7 +209,20 @@ export default class MainScene extends Phaser.Scene {
 	}
 	
   }
-
+  
+  died(){
+	  this.collisionSound.play();
+	  window.game.state.paused = true;
+	  this.themeTune.stop();
+	  this.mm.body.setVelocityX(0);
+	  setTimeout(()=>{
+		  
+		  this.scene.restart();
+		  
+	  }, 2000);
+	  
+  }
+  
   showDarkMode(show) {
 	  if(show) {
 		this.spotLight = this.make.sprite({
@@ -316,17 +334,15 @@ export default class MainScene extends Phaser.Scene {
 		
 	} else {
 		
-		this.scene.restart();
+		this.died();
 		
 	}
   }
   
   checkCollision(sprite, tile){
 	  
-	if(this.mm.getBounds().bottom > tile.pixelY){
-		this.collisionSound.play();
-		this.scene.restart();
-		
+	if(this.mm.getBounds().bottom > tile.pixelY && !window.game.state.paused){
+		this.died();
 	}
 	
     // Return true to exit processing collision of this tile vs the sprite - in this case, it
@@ -336,118 +352,120 @@ export default class MainScene extends Phaser.Scene {
   }
   
   update(time) {
-	  
-	  this.clouds.tilePositionX += 1;
-	  this.hills1.tilePositionX = this.cameras.main.scrollX/2;
-	  this.hills2.tilePositionX = this.cameras.main.scrollX/4;
-	  this.hills3.tilePositionX = this.cameras.main.scrollX/8;
-	  
-	  this.moving = true;
-	  
-	  if(time - this.mm.state.drillingST > 500 && this.mm.state.drilling){
-		  
-		  this.mm.state.drilling = false;
-		  this.setMMAnimation('running');
-		  
-	  }
-	  
-	  if(this.mm.body.onFloor()){
-		  
-		var keyDown = false;
-		/*if (this.cursors.left.isDown) {
-			keyDown = true;
-			this.mm.setFlipX(true);
-			
-			this.setMMAnimation('running');
-			
-			this.mm.body.setVelocityX(-150);
-		}
+	  if(!window.game.state.paused){
 		
-		else*/ if (this.moving) {
-			keyDown = true;
-			this.mm.setFlipX(false);
-			
-			this.setMMAnimation('running');
-			
-			this.mm.body.setVelocityX(150);
-		}
+		  this.clouds.tilePositionX += 1;
+		  this.hills1.tilePositionX = this.cameras.main.scrollX/2;
+		  this.hills2.tilePositionX = this.cameras.main.scrollX/4;
+		  this.hills3.tilePositionX = this.cameras.main.scrollX/8;
 		  
-		if (this.cursors.up.isDown && !this.mm.state.jumping) {
-			keyDown = true;
-			this.mm.state.jumping = true;
-			this.setMMAnimation('jump');
-			this.mm.body.setVelocityY(-350);
-			this.jumpSound.play();
-		}
-
-		if (!this.cursors.up.isDown) {
-			this.mm.state.jumping = false;
-			this.mm.state.doubleJump = false;
-			this.mm.state.doubleJumpReady = false;
-		}
-		
-		
-		if (this.cursors.down.isDown && !this.mm.state.jumping && window.game.state.hasSlide) {
-			keyDown = true;
-			this.mm.body.setSize(48, 16);
-			this.mm.body.setOffset(0, 16);
-		} else {
-			this.mm.body.setSize(48, 32);
-			this.mm.body.setOffset(0, 0);
-		}
-
-		if(this.fireKey.isDown){
-			
-			if(window.game.state.hasDrill && this.mm.state.canDrill && !this.mm.state.drilling) {
-				
-				this.mm.state.drilling = true;
-				this.mm.state.drillingST = time;
-				this.mm.state.canDrill = false;
-				
-			}
-
-		} else {
-			
-			this.mm.state.canDrill = true;
-			
-		}
-		
-	  } else {
+		  this.moving = true;
 		  
-		 	this.setMMAnimation('jump');
+		  if(time - this.mm.state.drillingST > 500 && this.mm.state.drilling){
+			  
+			  this.mm.state.drilling = false;
+			  this.setMMAnimation('running');
+			  
+		  }
 		  
+		  if(this.mm.body.onFloor()){
+			  
+			var keyDown = false;
 			/*if (this.cursors.left.isDown) {
+				keyDown = true;
 				this.mm.setFlipX(true);
+				
+				this.setMMAnimation('running');
+				
 				this.mm.body.setVelocityX(-150);
 			}
 			
 			else*/ if (this.moving) {
-				this.mm.setFlipX(false);
-				this.mm.body.setVelocityX(150);
-			} else {
-				
-				this.mm.body.setVelocityX(0);
-				
-			}
-		  
-			if (!this.cursors.up.isDown && window.game.state.hasDoubleJump) {
-				this.mm.state.doubleJumpReady = true;
-			}
-
-			if (!this.mm.state.doubleJump && this.mm.state.doubleJumpReady && this.cursors.up.isDown && this.mm.state.jumping) {
 				keyDown = true;
-				this.mm.state.doubleJump = true;
+				this.mm.setFlipX(false);
+				
+				this.setMMAnimation('running');
+				
+				this.mm.body.setVelocityX(150);
+			}
+			  
+			if (this.cursors.up.isDown && !this.mm.state.jumping) {
+				keyDown = true;
+				this.mm.state.jumping = true;
 				this.setMMAnimation('jump');
-				this.mm.body.setVelocityY(-250);
+				this.mm.body.setVelocityY(-350);
 				this.jumpSound.play();
 			}
-	  }
 
-	  if(this.isDark) {
-		this.spotLight.x = this.mm.x - this.cameras.main.scrollX + this.mm.displayWidth;
-		this.spotLight.y = this.mm.y;
+			if (!this.cursors.up.isDown) {
+				this.mm.state.jumping = false;
+				this.mm.state.doubleJump = false;
+				this.mm.state.doubleJumpReady = false;
+			}
+			
+			
+			if (this.cursors.down.isDown && !this.mm.state.jumping && window.game.state.hasSlide) {
+				keyDown = true;
+				this.mm.body.setSize(48, 16);
+				this.mm.body.setOffset(0, 16);
+			} else {
+				this.mm.body.setSize(48, 32);
+				this.mm.body.setOffset(0, 0);
+			}
+
+			if(this.fireKey.isDown){
+				
+				if(window.game.state.hasDrill && this.mm.state.canDrill && !this.mm.state.drilling) {
+					
+					this.mm.state.drilling = true;
+					this.mm.state.drillingST = time;
+					this.mm.state.canDrill = false;
+					
+				}
+
+			} else {
+				
+				this.mm.state.canDrill = true;
+				
+			}
+			
+		  } else {
+			  
+				this.setMMAnimation('jump');
+			  
+				/*if (this.cursors.left.isDown) {
+					this.mm.setFlipX(true);
+					this.mm.body.setVelocityX(-150);
+				}
+				
+				else*/ if (this.moving) {
+					this.mm.setFlipX(false);
+					this.mm.body.setVelocityX(150);
+				} else {
+					
+					this.mm.body.setVelocityX(0);
+					
+				}
+			  
+				if (!this.cursors.up.isDown && window.game.state.hasDoubleJump) {
+					this.mm.state.doubleJumpReady = true;
+				}
+
+				if (!this.mm.state.doubleJump && this.mm.state.doubleJumpReady && this.cursors.up.isDown && this.mm.state.jumping) {
+					keyDown = true;
+					this.mm.state.doubleJump = true;
+					this.setMMAnimation('jump');
+					this.mm.body.setVelocityY(-250);
+					this.jumpSound.play();
+				}
+		  }
+
+		  if(this.isDark) {
+			this.spotLight.x = this.mm.x - this.cameras.main.scrollX + this.mm.displayWidth;
+			this.spotLight.y = this.mm.y;
+		  }
+	    
 	  }
-	  
   }
   
 	setMMAnimation(anim){
