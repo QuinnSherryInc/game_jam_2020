@@ -174,20 +174,8 @@ export default class MainScene extends Phaser.Scene {
 				});
 			
 			  
-		  	} else if(this.game.state.level == 2){
+		  	} else {
 				
-				window.game.state.hasSlide = false;
-		  
-			} else if(this.game.state.level == 3){
-				
-				window.game.state.hasDoubleJump = false;
-		  
-			} else if(this.game.state.level == 4){
-				
-				window.game.state.hasDrill = false;
-		  
-			} else {
-		
 				this.showReadyText("Great job!");
 			
 				var transitionTexture = this.add.image(240, 160, "scene-transition")
